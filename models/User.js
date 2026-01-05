@@ -1,0 +1,25 @@
+const mongoose=require("mongoose");
+
+const userSchema=mongoose.Schema({
+    fullname:String,
+    email:String,
+    password:String,
+    isadmin:Boolean,
+    cart:{
+        type:Array,
+        default:[]
+    },
+    order:{
+        type:Array,
+        default:[]
+    },
+    contact:Number,
+    picture:String
+})
+
+const userModel=mongoose.model("user",userSchema);
+module.exports=userModel;
+
+
+
+
