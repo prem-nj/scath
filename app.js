@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cookieparser = require("cookie-parser");
 const path = require("path");
+const flash=require("connect-flash")
 require("dotenv").config();
 
 // Enable debug after dotenv loads
@@ -15,6 +16,7 @@ const serverlog = makelogger("server");
 const ownersRouter = require("./routes/owenersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
+const expsession = require("express-session");
 
 connectDB();
 
@@ -25,6 +27,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieparser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(expsession({
+  resave:false,
+  saveUninitialized:false,
+  secret:process.env.EXPRESS_SESSION_KEY
+}))
+
+
+app.use(flash())
 app.use("/owners", ownersRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
