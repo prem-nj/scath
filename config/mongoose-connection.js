@@ -1,13 +1,19 @@
 const mongoose = require("mongoose");
 
+const makelogger=require("../utils/loggers");
+
+const dbgr=makelogger("db:mongoose");
+
+const config=require("config");
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URL);
+    await mongoose.connect(config.get("MONGODB_URI"));
 
-    console.log(` MongoDB Connected: ${mongoose.connection.host}`);
+    dbgr(` MongoDB Connected: ${mongoose.connection.host}/`);
   } catch (error) {
-    console.error(" MongoDB connection FAILED:", error.message);
-    process.exit(1); // Critical: exit on connection failure
+      dbgr(" MongoDB connection FAILED:", error.message);
+      throw error;
   }
 };
 

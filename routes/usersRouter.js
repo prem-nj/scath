@@ -1,9 +1,21 @@
-const express=require("express")
-const uerRouter=express.Router();
+const express = require("express");
+const userRouter = express.Router();
+const userModel = require("../models/User");
+const bcrypt = require("bcrypt");
+const generateToken = require("../utils/generateToken");
+const {registerUser}=require("../controllers/authController")
+const {loginUser}=require("../controllers/authController.js")
 
-uerRouter.get('/',(req,res)=>{
-    res.send("userRouter working fine")
-})
 
 
-module.exports=uerRouter;
+userRouter.get("/", (req, res) => {
+  res.send("userRouter working fine");
+});
+
+userRouter.post("/reg",registerUser );
+
+userRouter.post("/login",loginUser)
+
+
+
+module.exports = userRouter;

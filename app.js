@@ -2,14 +2,20 @@ const express = require("express");
 const app = express();
 const cookieparser = require("cookie-parser");
 const path = require("path");
-const dotenv = require("dotenv");
+require("dotenv").config();
+
+// Enable debug after dotenv loads
+const debug = require("debug");
+debug.enable(process.env.DEBUG || "");
+
 const connectDB = require("./config/mongoose-connection");
+const makelogger = require("./utils/loggers");
+const serverlog = makelogger("server");
 
 const ownersRouter = require("./routes/owenersRouter");
 const productsRouter = require("./routes/productsRouter");
 const usersRouter = require("./routes/usersRouter");
 
-dotenv.config();
 connectDB();
 
 app.set("view engine", "ejs");
@@ -24,5 +30,7 @@ app.use("/users", usersRouter);
 app.use("/products", productsRouter);
 
 app.listen(process.env.PORT, function () {
-  console.log("server is running");
+  serverlog("server is running");
 });
+
+
