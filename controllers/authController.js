@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/User");
 const generateToken = require("../utils/generateToken");
-const cookie=require("cookie-parser")
+const cookie = require("cookie-parser");
 
 module.exports.registerUser = async (req, res) => {
   try {
@@ -22,14 +22,7 @@ module.exports.registerUser = async (req, res) => {
         const token = generateToken(createduser);
         res.cookie("token", token);
 
-        res.status(201).json({
-          message: "User registered successfully",
-          user: {
-            id: createduser._id,
-            fullname: createduser.fullname,
-            email: createduser.email,
-          },
-        });
+        res.redirect("/shop");
       });
     });
   } catch (err) {
@@ -37,24 +30,30 @@ module.exports.registerUser = async (req, res) => {
   }
 };
 
-module.exports.loginUser=async (req,res)=>{
-  try{
-    const {email,password}=req.body;
-    const user=userModel.find({email});
+module.exports.loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
 
-    if(user){
-      bcrypt.compare(user.password,req.body.password,function(err,result){
-        if(result===true){
-           const token=generateToken(user);
-           res.cookie("token",token);
-        }else{
-          res.status(500).send("something went wrong");
-        }
-      })
+    if (!user) {
+      return res.status(401).send("Email or password is incorrect");
     }
 
-
-  }catch(err){
-       res.send(err);
+    bcrypt.compare(password, user.password, function (err, result) {
+      if (result === true) {
+        const token = generateToken(user);
+        res.cookie("token", token);
+        res.redirect("/shop");
+      } else {
+        res.status(401).send("Email or password is incorrect");
+      }
+    });
+  } catch (err) {
+    res.status(500).send(err.message);
   }
-}
+};
+
+module.exports.logoutUser = (req, res) => {
+  res.cookie("token", "");
+  res.redirect("/");
+};
