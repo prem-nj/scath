@@ -9,6 +9,11 @@ productRouter.get("/", (req, res) => {
   res.send("product router is fine");
 });
 
+productRouter.get("/upload", async (req, res) => {
+  const products = await productModle.find();
+  res.render("createproducts", { products });
+});
+
 productRouter.post(
   "/upload",
   upload.single("image"),
@@ -49,13 +54,22 @@ productRouter.post(
         textcolor,
       });
 
-      // Render shop page with product data
-      res.render("shop", { product });
+      // Fetch all products from database
+      const products = await productModle.find();
+
+      // Render shop page with all products
+      res.render("createproducts", { products });
     } catch (error) {
       console.error("Upload error:", error);
       res.status(500).send("Error uploading image.");
     }
   }
 );
+
+productRouter.get("/delete/:id", async (req, res) => {
+  let deleted = await productModle.findOneAndDelete({ _id: req.params.id });
+  req.flash("success","deleted successfully")
+  res.redirect("/products/upload");
+});
 
 module.exports = productRouter;
