@@ -51,6 +51,25 @@
     </script>
   </head>
   <body class="bg-gray-100 min-h-screen">
+    <%if(success.length>0){%>
+    <div
+      id="flash-message"
+      class="fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500 transform translate-x-0 opacity-100 z-50"
+    >
+      <%=success%>
+    </div>
+    <script>
+      const flash = document.getElementById("flash-message");
+      if (flash) {
+        setTimeout(() => {
+          flash.classList.add("translate-x-full", "opacity-0");
+          setTimeout(() => {
+            flash.remove();
+          }, 500);
+        }, 3000);
+      }
+    </script>
+    <%}%>
     <!-- Header -->
     <div class="bg-gray-700 text-white py-4 px-8">
       <h1 class="text-xl font-semibold">

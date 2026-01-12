@@ -11,7 +11,8 @@ productRouter.get("/", (req, res) => {
 
 productRouter.get("/upload", async (req, res) => {
   const products = await productModle.find();
-  res.render("createproducts", { products });
+  const success=req.flash("success")
+  res.render("createproducts", { products,success });
 });
 
 productRouter.post(
@@ -57,8 +58,11 @@ productRouter.post(
       // Fetch all products from database
       const products = await productModle.find();
 
-      // Render shop page with all products
-      res.render("createproducts", { products });
+
+      req.flash('success', 'Products created successfully!')
+       
+      // Redirect to show flash message
+      res.redirect("/products/upload");
     } catch (error) {
       console.error("Upload error:", error);
       res.status(500).send("Error uploading image.");

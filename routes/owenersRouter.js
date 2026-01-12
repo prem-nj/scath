@@ -24,4 +24,10 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
+ownersRouter.get("/admin", (req, res) => {
+  let success=req.flash("sucess");
+  res.render("admin", { success});
+});
+
+
 module.exports = ownersRouter;

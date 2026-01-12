@@ -19,8 +19,9 @@ router.get("/users/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/owners/admin", (req, res) => {
-  res.render("admin");
-});
+router.get("/shop",(req,res)=>{
+  res.render("shop");
+})
+
 
 module.exports = router;
