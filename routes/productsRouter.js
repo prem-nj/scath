@@ -29,14 +29,14 @@ productRouter.post(
         price,
         discount,
         Number,
-        bgcolor,
+        color,
         pancolor,
         textcolor,
         strikeAmount,
       } = req.body;
 
       console.log("Form data received:", req.body);
-      console.log("bgcolor value:", bgcolor);
+      console.log("color value:", color);
 
       const filePath = req.file.path;
 
@@ -54,7 +54,7 @@ productRouter.post(
         image: result.secure_url,
         discount,
         Number,
-        color: bgcolor,
+        color,
         textcolor,
         strikeAmount,
       });

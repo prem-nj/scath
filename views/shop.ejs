@@ -5,6 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SCATH - Premium Hoodies & Lifestyle</title>
     <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+      let quantity = 1;
+
+      function openmodel(name, price, image) {
+        document.getElementById("name").innerText = name;
+        document.getElementById("price").innerText = "Rs " + price;
+        document.querySelector(".imageproduct").src = image;
+        document.querySelector(".product_model").classList.remove("hidden");
+        document.getElementById("maincontent").classList.add("hidden");
+        quantity = 1;
+        updateQuantity();
+      }
+
+      function displaysize(size) {
+        document.getElementById("size_display").innerText = "SIZE: " + size;
+      }
+
+      function increaseQuantity() {
+        quantity++;
+        updateQuantity();
+      }
+
+      function decreaseQuantity() {
+        if (quantity > 1) {
+          quantity--;
+          updateQuantity();
+        }
+      }
+
+      function updateQuantity() {
+        document.getElementById("quantity_display").innerText = quantity;
+      }
+
+      function closemodel() {
+        document.querySelector(".product_model").classList.add("hidden");
+        document.getElementById("maincontent").classList.remove("hidden");
+      }
+    </script>
+
+
     <style>
       /* Hero Section Styles */
       .hero-section {
@@ -43,6 +83,7 @@
         object-position: center;
         opacity: 0;
         animation: fadeIn 1s ease-in forwards;
+        pointer-events: none;
       }
 
       .hero-video-fallback {
@@ -206,6 +247,12 @@
         scroll-behavior: smooth;
       }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body class="bg-gray-50">
     <!-- Navigation Bar -->
@@ -372,8 +419,6 @@
           muted
           loop
           playsinline
-          loading="lazy"
-          aria-label="SCATH hoodie showcase video"
           id="heroVideo"
         >
           <source src="/videos/scath-hoodie.mp4" type="video/mp4" />
@@ -402,8 +447,181 @@
     </section>
 
     <!-- Main Content Section (Shop) -->
-    <div id="shop">
+
+    <div id="maincontent">
+      <div id="shop" style="margin-top: 3rem">
       <!-- Your existing shop content goes here -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <%products.forEach(pr=>{%>
+        <div
+          class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+        >
+          <!-- Product Image Container -->
+          <div class="relative bg-white group">
+            <!-- Badge -->
+            <div
+              class="absolute top-3 left-3 bg-gray-200 px-2 py-1 text-xs font-bold text-gray-800 uppercase"
+            >
+              <% if(pr.discount>0){ %> SAVE <%=pr.discount %>% <% } else { %>
+              BEST SELLER <% } %>
+            </div>
+
+            <!-- Action Icons -->
+            <div class="absolute top-3 right-3 flex flex-col gap-2">
+              <button
+                class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+                onclick="openmodel('<%=pr.productName%>','<%=pr.price%>','<%=pr.image%>')"
+              >
+                <svg
+                  class="w-4 h-4 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <circle cx="12" cy="12" r="3" fill="currentColor" />
+                </svg>
+              </button>
+              <button
+                class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition"
+              >
+                <svg
+                  class="w-4 h-4 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Product Image -->
+            <img
+              src="<%= pr.image %>"
+              alt="<%= pr.productName %>"
+              class="w-full h-64 object-cover"
+            />
+          </div>
+
+          <!-- Product Info -->
+          <div class="p-4 bg-gray-50">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <h3 class="text-gray-700 font-normal text-sm mb-1">
+                  <%= pr.productName %>
+                </h3>
+                <p class="text-gray-900 font-semibold text-base">
+                  <% if(pr.strikeAmount>0){ %>
+                  <span class="line-through">Rs. <%=pr.strikeAmount%></span>
+                  <% } %> Rs. <%= pr.price.toLocaleString() %>
+                </p>
+                <% if(pr.color){ %>
+                <div
+                  class="colour p-2 border rounded-lg w-6 h-6"
+                  style="background-color: <%=pr.color%>"
+                ></div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%})%>
+      </div>
+    </div>
+  </div>
+  </main>
+
+
+
+  <div class="product_model fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+      <div class="border-2 rounded-2xl w-[70%] h-[70vh] flex bg-white overflow-hidden shadow-2xl relative">
+        <div class="left_box w-1/2 bg-gray-50 flex items-center justify-center p-8">
+          <img src="https://res.cloudinary.com/dfrgkp4oe/image/upload/v1768322635/u2qaufizvx2bwdypelhu.png" class="imageproduct max-h-full w-full object-contain" alt="Product">
+        </div>
+
+        <div class="right w-1/2 p-10 flex flex-col justify-center">
+          <div class="detail flex flex-col gap-4">
+            <p class="text-sm text-gray-500 uppercase tracking-widest">Scath</p>
+            <h2 class="font-bold text-gray-900" id="name">Premium</h2>
+            <p class="text-2xl font-semibold text-gray-800" id="price">Rs 10000</p>
+
+            <div class="mt-6">
+              <p class="text-sm font-bold mb-3">SELECT SIZE</p>
+              <p class="text-sm mb-3" id="size_display"></p>
+
+              <!-- Quantity Selector -->
+              <div class="mb-4">
+                <p class="text-sm font-bold mb-3">QUANTITY</p>
+                <div class="flex items-center gap-4 border-2 border-gray-200 rounded-lg w-fit">
+                  <button onclick="decreaseQuantity()" class="px-4 py-2 hover:bg-gray-100 transition">
+                    <svg width="12" height="2" fill="none" viewBox="0 0 12 2">
+                      <path d="M0 1H12" stroke="currentColor" stroke-width="1.5"></path>
+                    </svg>
+                  </button>
+                  <span id="quantity_display" class="font-semibold text-lg min-w-[30px] text-center">1</span>
+                  <button onclick="increaseQuantity()" class="px-4 py-2 hover:bg-gray-100 transition">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+                      <path d="M0 6H12" stroke="currentColor" stroke-width="1.5"></path>
+                      <path d="M6 0V12" stroke="currentColor" stroke-width="1.5"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-3">
+                <button class="size border-2 border-gray-200 px-4 py-2 rounded-md hover:border-black hover:bg-black hover:text-white transition-all font-medium" onclick="displaysize('S')">
+                  S
+                </button>
+                <button class="size border-2 border-gray-200 px-4 py-2 rounded-md hover:border-black hover:bg-black hover:text-white transition-all font-medium" onclick="displaysize('M')">
+                  M
+                </button>
+                <button class="size border-2 border-gray-200 px-4 py-2 rounded-md hover:border-black hover:bg-black hover:text-white transition-all font-medium" onclick="displaysize('L')">
+                  L
+                </button>
+                <button class="size border-2 border-gray-200 px-4 py-2 rounded-md hover:border-black hover:bg-black hover:text-white transition-all font-medium" onclick="displaysize('XL')">
+                  XL
+                </button>
+                <button class="size border-2 border-gray-200 px-4 py-2 rounded-md hover:border-black hover:bg-black hover:text-white transition-all font-medium" onclick="displaysize('2XL')">
+                  2XL
+                </button>
+              </div>
+            </div>
+
+            <div class="btn flex gap-2 items-center justify-center">
+              <button class="mt-8 bg-black text-white py-2 rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors w-1/2 inline-block">
+                ADD TO CART
+              </button>
+              <button class="mt-8 bg-black text-white py-2 rounded-xl font-bold text-lg hover:bg-blue-500 transition-colors w-1/2">
+                BUY NOW
+              </button>
+            </div>
+          </div>
+
+          <button onclick="closemodel()" class="absolute top-5 right-5 text-gray-400 hover:text-black text-2xl">
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="w-full h-1/5">
+      <img
+        src="/images/endered-size--1500---400-px-rendered-aspect-ratio-.png"
+        alt="banner"
+        class="w-full h-full"
+      />
     </div>
 
     <!-- Customer Testimonials Section -->
@@ -711,128 +929,30 @@
     </section>
 
     <script>
-      // Hero Video Management and Optimization
+      // Simple Hero Video - Just ensure it plays and loops
       document.addEventListener("DOMContentLoaded", function () {
         const heroVideo = document.getElementById("heroVideo");
         const loadingSpinner = document.querySelector(".hero-loading-spinner");
-        const videoContainer = document.querySelector(".hero-video-container");
         const fallbackImage = document.querySelector(".hero-video-fallback");
 
-        // Video Ready Handler
-        function handleVideoReady() {
-          if (loadingSpinner) {
-            loadingSpinner.style.display = "none";
-          }
-          heroVideo.style.opacity = "1";
-          // Ensure video plays
-          heroVideo.play().catch((err) => {
-            console.warn("Autoplay prevented:", err);
-          });
-        }
-
-        // Video Error Handler
-        function handleVideoError() {
-          console.warn("Video failed to load, using fallback image");
-          if (loadingSpinner) {
-            loadingSpinner.style.display = "none";
-          }
-          if (fallbackImage) {
-            fallbackImage.style.opacity = "1";
-          }
-        }
-
-        // Check if video can play
         if (heroVideo) {
-          // Force autoplay on load
-          heroVideo.autoplay = true;
-          heroVideo.muted = true;
-          heroVideo.loop = true;
-
-          // Handle when metadata is loaded
-          heroVideo.addEventListener("canplay", handleVideoReady);
-
-          // Handle errors
-          heroVideo.addEventListener("error", handleVideoError);
-
-          // Handle if source fails
-          const sources = heroVideo.querySelectorAll("source");
-          sources.forEach((source) => {
-            source.addEventListener("error", handleVideoError);
+          // Hide spinner when video can play
+          heroVideo.addEventListener("canplay", function () {
+            if (loadingSpinner) loadingSpinner.style.display = "none";
+            heroVideo.style.opacity = "1";
           });
 
-          // Fallback timeout in case video doesn't load
-          setTimeout(() => {
-            if (heroVideo.paused && heroVideo.currentTime === 0) {
-              handleVideoError();
-            }
-          }, 5000);
-
-          // Force continuous looping with JavaScript
-          heroVideo.addEventListener(
-            "ended",
-            function () {
-              this.currentTime = 0;
-              this.play();
-            },
-            false
-          );
-
-          // Also listen for play event to ensure it continues
-          heroVideo.addEventListener(
-            "play",
-            function () {
-              // Keep playing
-            },
-            false
-          );
-
-          // Optimize for LCP - Prioritize video loading
-          heroVideo.setAttribute("priority", "high");
-        }
-
-        // Keyboard Navigation for CTA Button
-        const ctaButton = document.querySelector(".hero-cta");
-        if (ctaButton) {
-          ctaButton.addEventListener("keydown", function (e) {
-            if (e.key === "Enter" || e.key === " ") {
-              this.click();
-            }
+          // Play video
+          heroVideo.play().catch(function (err) {
+            console.log("Autoplay failed:", err);
+            if (fallbackImage) fallbackImage.style.opacity = "1";
+            if (loadingSpinner) loadingSpinner.style.display = "none";
           });
-        }
 
-        // Reduce motion support
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          const style = document.createElement("style");
-          style.textContent = `
-            .hero-content,
-            .hero-video {
-              animation: none !important;
-            }
-          `;
-          document.head.appendChild(style);
-        }
-      });
-
-      // Ensure autoplay works on page visibility change
-      document.addEventListener("visibilitychange", function () {
-        const heroVideo = document.getElementById("heroVideo");
-        if (heroVideo) {
-          if (document.hidden) {
-            heroVideo.pause();
-          } else {
-            heroVideo.play().catch((err) => {
-              console.warn("Autoplay prevented:", err);
-            });
-          }
-        }
-      });
-
-      // Ensure video plays on page load
-      window.addEventListener("load", function () {
-        const heroVideo = document.getElementById("heroVideo");
-        if (heroVideo && heroVideo.paused) {
-          heroVideo.play().catch((err) => {
-            console.warn("Autoplay prevented:", err);
+          // Simple loop handler - restart when ended
+          heroVideo.addEventListener("ended", function () {
+            this.currentTime = 0;
+            this.play();
           });
         }
       });
