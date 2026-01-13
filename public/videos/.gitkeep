@@ -1,0 +1,15 @@
+# Place your video files here:
+# - scath-hoodie.mp4 (Primary video format - H.264/AVC codec)
+# - scath-hoodie.webm (Alternative format - VP9 codec for better compression)
+
+# Video Optimization Recommendations:
+# 1. Resolution: Optimize for 1920x1080 or 4K (for responsive scaling)
+# 2. Duration: Keep under 15 seconds for faster LCP
+# 3. File Size: Target 5-10MB for MP4 (depends on duration and quality)
+# 4. Frame Rate: 24-30fps is sufficient
+# 5. Codec: H.264 for MP4, VP9 for WebM
+# 6. Audio: Muted in HTML, but can include subtle background sound if needed
+
+# FFmpeg conversion examples:
+# MP4: ffmpeg -i input.mov -vcodec libx264 -crf 23 -preset slow -acodec aac -b:a 128k scath-hoodie.mp4
+# WebM: ffmpeg -i input.mov -vcodec libvpx-vp9 -crf 30 -b:v 2000k scath-hoodie.webm
