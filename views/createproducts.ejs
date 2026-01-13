@@ -154,8 +154,16 @@
                   <%= pr.productName %>
                 </h3>
                 <p class="text-gray-900 font-semibold text-base">
-                  Rs. <%= pr.price.toLocaleString() %>
+                  <% if(pr.strikeAmount>0){ %>
+                  <span class="line-through">Rs. <%=pr.strikeAmount%></span>
+                  <% } %> Rs. <%= pr.price.toLocaleString() %>
                 </p>
+                <% if(pr.color){ %>
+                <div
+                  class="  colour p-2 border rounded-lg w-6 h-6"
+                  style="background-color: <%=pr.color%>"
+                ></div>
+                <% } %>
               </div>
               <div>
                 <a

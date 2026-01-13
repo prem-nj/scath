@@ -11,8 +11,8 @@ productRouter.get("/", (req, res) => {
 
 productRouter.get("/upload", async (req, res) => {
   const products = await productModle.find();
-  const success=req.flash("success")
-  res.render("createproducts", { products,success });
+  const success = req.flash("success");
+  res.render("createproducts", { products, success });
 });
 
 productRouter.post(
@@ -32,7 +32,11 @@ productRouter.post(
         bgcolor,
         pancolor,
         textcolor,
+        strikeAmount,
       } = req.body;
+
+      console.log("Form data received:", req.body);
+      console.log("bgcolor value:", bgcolor);
 
       const filePath = req.file.path;
 
@@ -50,17 +54,16 @@ productRouter.post(
         image: result.secure_url,
         discount,
         Number,
-        bgcolor,
-        pancolor,
+        color: bgcolor,
         textcolor,
+        strikeAmount,
       });
 
       // Fetch all products from database
       const products = await productModle.find();
 
+      req.flash("success", "Products created successfully!");
 
-      req.flash('success', 'Products created successfully!')
-       
       // Redirect to show flash message
       res.redirect("/products/upload");
     } catch (error) {
@@ -72,7 +75,7 @@ productRouter.post(
 
 productRouter.get("/delete/:id", async (req, res) => {
   let deleted = await productModle.findOneAndDelete({ _id: req.params.id });
-  req.flash("success","deleted successfully")
+  req.flash("success", "deleted successfully");
   res.redirect("/products/upload");
 });
 

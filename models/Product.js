@@ -10,8 +10,11 @@ const productSchema=mongoose.Schema({
         default:0
      },
 
-     bgcolor:String,
-     pancolor:String,
+     color:String,
+     strikeAmount:{
+      type:Number,
+      default:0
+     },
      textcolor:String
 })
 
